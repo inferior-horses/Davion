@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Davion", "Davion\Davion.csproj", "{4819FAA6-06AB-4EB9-8AB8-3C8E7F195D97}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AST", "AST\AST.csproj", "{9A0D49AE-861C-403F-87D0-D7A01CCEC530}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4819FAA6-06AB-4EB9-8AB8-3C8E7F195D97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4819FAA6-06AB-4EB9-8AB8-3C8E7F195D97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4819FAA6-06AB-4EB9-8AB8-3C8E7F195D97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4819FAA6-06AB-4EB9-8AB8-3C8E7F195D97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A0D49AE-861C-403F-87D0-D7A01CCEC530}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A0D49AE-861C-403F-87D0-D7A01CCEC530}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A0D49AE-861C-403F-87D0-D7A01CCEC530}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A0D49AE-861C-403F-87D0-D7A01CCEC530}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
