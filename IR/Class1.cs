@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Davion
+namespace IR
 {
-    class Program
+    public class Class1
     {
         static void Main(string[] args)
         {

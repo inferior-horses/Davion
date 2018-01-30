@@ -3,7 +3,4 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\AST\AST.csproj" />
-  </ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-﻿namespace AST
+﻿namespace IR
 {
     public enum Opcode
     {

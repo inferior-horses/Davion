@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AST
+namespace IR
 {
     public interface IOperand
     {
-        Int64 Value { get; }
+        long Value { get; }
     }
 
     public class Immdiate : IOperand
     {
-        public Int64 Value { get; private set; }
-        public Immdiate(Int64 number)
+        public long Value { get; private set; }
+        public Immdiate(long number)
         {
             Value = number;
         }
@@ -24,13 +24,13 @@ namespace AST
 
     public class Variable : IOperand
     {
-        public String Name;
+        public string Name;
 
-        public Dictionary<String, Int64> SymbolTable;
+        public Dictionary<string, long> SymbolTable;
 
-        public Int64 Value => SymbolTable[Name];
+        public long Value => SymbolTable[Name];
 
-        public Variable(String name, Dictionary<String, Int64> symbolTable)
+        public Variable(string name, Dictionary<string, long> symbolTable)
         {
             Name = name;
             SymbolTable = symbolTable;
