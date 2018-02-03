@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace IR
 {
     public interface IOperand
     {
-        long Value { get; }
+        int Value { get; }
     }
 
     public class Immdiate : IOperand
     {
-        public long Value { get; private set; }
-        public Immdiate(long number)
+        public int Value { get; private set; }
+        public Immdiate(int number)
         {
             Value = number;
         }
@@ -26,11 +25,11 @@ namespace IR
     {
         public string Name;
 
-        public Dictionary<string, long> SymbolTable;
+        public Dictionary<string, int> SymbolTable;
 
-        public long Value => SymbolTable[Name];
+        public int Value => SymbolTable[Name];
 
-        public Variable(string name, Dictionary<string, long> symbolTable)
+        public Variable(string name, Dictionary<string, int> symbolTable)
         {
             Name = name;
             SymbolTable = symbolTable;

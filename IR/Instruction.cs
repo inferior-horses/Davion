@@ -4,10 +4,12 @@ using System.Text;
 
 namespace IR
 {
+    
     public abstract class Instruction
     {
         public Opcode Opcode;
         public IOperand[] Operands;
+        public int Address;
 
         public string MakeString(string prefix, string spliter)
         {
@@ -198,8 +200,8 @@ namespace IR
             Operands = new IOperand[] {immdiate};
         }
 
-        public Bra(long address)
-            : this(new Immdiate(address))
+        public Bra(int target)
+            : this(new Immdiate(target))
         {
         }
     }
@@ -212,7 +214,7 @@ namespace IR
             Operands = new IOperand[] {x, y};
         }
 
-        public Bne(IOperand x, long y)
+        public Bne(IOperand x, int y)
             : this(x, new Immdiate(y))
         {
         }
@@ -226,7 +228,7 @@ namespace IR
             Operands = new IOperand[] {x, y};
         }
 
-        public Beq(IOperand x, long y)
+        public Beq(IOperand x, int y)
             : this(x, new Immdiate(y))
         {
         }
@@ -240,7 +242,7 @@ namespace IR
             Operands = new IOperand[] {x, y};
         }
 
-        public Ble(IOperand x, long y)
+        public Ble(IOperand x, int y)
             : this(x, new Immdiate(y))
         {
         }
@@ -254,7 +256,7 @@ namespace IR
             Operands = new IOperand[] {x, y};
         }
 
-        public Blt(IOperand x, long y)
+        public Blt(IOperand x, int y)
             : this(x, new Immdiate(y))
         {
         }
@@ -268,7 +270,7 @@ namespace IR
             Operands = new IOperand[] {x, y};
         }
 
-        public Bge(IOperand x, long y)
+        public Bge(IOperand x, int y)
             : this(x, new Immdiate(y))
         {
         }
@@ -282,7 +284,7 @@ namespace IR
             Operands = new IOperand[] {x, y};
         }
 
-        public Bgt(IOperand x, long y)
+        public Bgt(IOperand x, int y)
             : this(x, new Immdiate(y))
         {
         }

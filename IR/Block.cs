@@ -5,13 +5,13 @@ namespace IR
 {
     public class Block : IEnumerable<Instruction>
     {
-        private long Begin;
-        private long End;
-        private Instruction[] Instructions;
+        public int Begin { get; }
+        public int End { get; }
+        private List<Instruction> Instructions;
         public Block[] Pred;
         public Block[] Succ;
 
-        public Block(Instruction[] instructions, long begin, long end, Block[] pred = null, Block[] succ = null)
+        public Block(List<Instruction> instructions, int begin, int end, Block[] pred = null, Block[] succ = null)
         {
             Instructions = instructions;
             Begin = begin;
