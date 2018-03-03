@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 
 namespace IR
 {
@@ -9,7 +10,8 @@ namespace IR
 
     public class Immdiate : IOperand
     {
-        public int Value { get; private set; }
+        public int Value { get; }
+
         public Immdiate(int number)
         {
             Value = number;
@@ -38,6 +40,27 @@ namespace IR
         public override string ToString()
         {
             return Name;
+        }
+    }
+
+    public class Temporary : IOperand
+    {
+        public int Value { get; }
+        private static int _number = 0;
+        private readonly string _name;
+
+        public Temporary(int value)
+        {
+            Value = value;
+            var sb = new StringBuilder();
+            sb.Append('t').Append(_number);
+            _name = sb.ToString();
+            _number += 1;
+        }
+
+        public override string ToString()
+        {
+            return _name;
         }
     }
 }

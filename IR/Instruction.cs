@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
 namespace IR
 {
-    
     public abstract class Instruction
     {
         public Opcode Opcode;
@@ -21,6 +21,20 @@ namespace IR
             }
 
             return sb.ToString();
+        }
+
+        public bool IsExpression()
+        {
+            switch (Opcode)
+            {
+                case Opcode.Neg:
+                case Opcode.Add:
+                case Opcode.Sub:
+                case Opcode.Mul:
+                case Opcode.Div: return true;
+                default:
+                    return false;
+            }
         }
     }
 
