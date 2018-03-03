@@ -5,12 +5,11 @@ namespace IR
 {
     public interface IOperand
     {
-        int Value { get; }
     }
 
     public class Immdiate : IOperand
     {
-        public int Value { get; }
+        public readonly int Value;
 
         public Immdiate(int number)
         {
@@ -25,42 +24,25 @@ namespace IR
 
     public class Variable : IOperand
     {
-        public string Name;
+        public readonly string Name;
+        private static int _number = 0;
 
-        public Dictionary<string, int> SymbolTable;
+        public static Variable GetTemporary()
+        {
+            var sb = new StringBuilder();
+            sb.Append('t').Append(_number);
+            _number += 1;
+            return new Variable(sb.ToString());
+        }
 
-        public int Value => SymbolTable[Name];
-
-        public Variable(string name, Dictionary<string, int> symbolTable)
+        public Variable(string name)
         {
             Name = name;
-            SymbolTable = symbolTable;
         }
 
         public override string ToString()
         {
             return Name;
-        }
-    }
-
-    public class Temporary : IOperand
-    {
-        public int Value { get; }
-        private static int _number = 0;
-        private readonly string _name;
-
-        public Temporary(int value)
-        {
-            Value = value;
-            var sb = new StringBuilder();
-            sb.Append('t').Append(_number);
-            _name = sb.ToString();
-            _number += 1;
-        }
-
-        public override string ToString()
-        {
-            return _name;
         }
     }
 }
