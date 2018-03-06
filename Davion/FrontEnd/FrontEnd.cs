@@ -20,37 +20,49 @@ namespace FrontEnd{
             this.pos_ = 0;
             this.num_word_ = words_.Length();
 
-            this.inner_words_;
+            this.pre_fetch_str_ = "";
+            this.inner_words_ = new string[] {}; // length == zero
             this.inner_pos_ = 0;
+
+            GetSym(); // in order to prefetch a sym
         }
 
         public string GetSym() // return current character on the input, 0x00=error, 0xff=EOF
         {
+            string r = pre_fetch_str_;
+
             if (pos_ < num_word_)
             {
-                string r = pre_fetch_str_;
-                // inner_words_ = Regex.Split(words_[pos_], @"(?<=[.,;])");
                 if(inner_pos_ < inner_words_.Length()){
                     pre_fetch_str_ = inner_words_[inner_pos_++];
-                    if(inner_pos_ >= inner_words_.Length()){
-                        pos++;
-                        if (pos_ == num_word_){
-                            return (char)0xff;
-                        }
+                }// else empty words
+                else{
+                    inner_pos_ = 0;
+                    pos++;
+
+                    if (pos_ == num_word_){
+                        pre_fetch_str_ = (char)0xff;
+                    }else if (pos > num_word_){
+                        pre_fetch_str_ = (char)0x00;
+                    }else{
                         inner_words_ = Regex.Split(words_[pos_], @"(?<=[ (,;+-*/[ ])");
                     }
-                }
 
-                return r;
+                    pre_fetch_str_ = inner_words_[inner_pos_++];
+                }
             }
             else if (pos_ == num_word_)
             {
-                return (char)0xff;
+                pre_fetch_str_ = (char)0xff;
+                //return (char)0xff;
             }
             else
             {
-                return (char)0x00;
+                pre_fetch_str_ = (char)0x00;
+                // return (char)0x00;
             }
+
+            return r;
         }
 
         public void Error(string error_msg); // signal an error with current file position
@@ -58,18 +70,7 @@ namespace FrontEnd{
         public string PreFetch() // return current character on the input, 0x00=error, 0xff=EOF
         {
             // change: return pre_fetch_str_
-            if (pos_ + 1 < num_word_)
-            {
-                return words_[pos_ + 1];
-            }
-            else if (pos_ + 1 == num_word_)
-            {
-                return (char)0xff;
-            }
-            else
-            {
-                return (char)0x00;
-            }
+            return pre_fetch_str_;
         }
 
     }
