@@ -27,6 +27,7 @@ namespace FrontEnd{
             GetSym(); // in order to prefetch a sym
         }
 
+        // not parsing properly, need to rewrite
         public string GetSym() // return current character on the input, 0x00=error, 0xff=EOF
         {
             string r = pre_fetch_str_;
@@ -45,7 +46,7 @@ namespace FrontEnd{
                     }else if (pos > num_word_){
                         pre_fetch_str_ = (char)0x00;
                     }else{
-                        inner_words_ = Regex.Split(words_[pos_], @"(?<=[ (,;+-*/[ ])");
+                        inner_words_ = Regex.Split(words_[pos_], @"();[]+-*/");
                     }
 
                     pre_fetch_str_ = inner_words_[inner_pos_++];

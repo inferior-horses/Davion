@@ -6,6 +6,7 @@ namespace IR
     {
         public List<Block> Blocks;
         public List<Instruction> Instructions;
+        public List<IOperand> Results;
 
         public Function()
         {
