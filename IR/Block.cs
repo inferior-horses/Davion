@@ -32,5 +32,7 @@ namespace IR
         {
             return GetEnumerator();
         }
+
+        // AppendInstruction(int ins_id)
     }
 }

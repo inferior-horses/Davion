@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using IR.Block
+using IR.Operand
+using IR.Instructions
+using FrontEnd.GenerateIR
 
 namespace Davion.FrontEnd
 {
@@ -115,7 +119,7 @@ namespace Davion.FrontEnd
              funcDecl  =  (“function” | “procedure”) ident [formalParam] “;” funcBody “;”
         */
         public bool FuncDecl()
-        {            
+        {
             if(PreFetchSym() != Tokens.kFuncToken && PreFetchSym() != Tokens.kProcToken){
                 Error("Expected FuncToken or ProcToken");
                 return false;
@@ -313,17 +317,18 @@ namespace Davion.FrontEnd
         */
         public bool Assignment()
         {
+            Variable dest;
+            IOperand source;
             if(!EatToken(Tokens.kLetToken)){
                 return false;
             }
 
-            if(Designator() == false){
+            if(Designator(dest) == false){
                 Error("Expected Designator");
                 return false;
             }
 
-
-            if(Expression() == false){
+            if(Expression(source) == false){
                 Error("Expected Expression");
                 return false;
             }
@@ -334,7 +339,7 @@ namespace Davion.FrontEnd
         /*
              funcCall  =  “call” ident [ “(“ [expression { “,” expression } ] “)” ]
         */
-        public bool FuncCall()
+        public bool FuncCall(out IOperand func_result)
         {
             if(!EatToken(Tokens.kCallToken)){
                 return false;
@@ -468,10 +473,17 @@ namespace Davion.FrontEnd
         /*
              designator = ident{ "[" expression "]" }
         */
-        public bool Designator()
+        public bool Designator(out IOperand variable)
         {
             if(!EatToken(Tokens.kIdent)){
                 return false;
+            }
+            
+            // is not array
+            // necessary to devide into two situation?
+            if(PreFetchSym() != Tokens.kOpenbracketToken){
+                // current variable name is scanner_.id
+                variable = New Variable(scanner_.id);
             }
 
             while(PreFetchSym() == Tokens.kOpenbracketToken){
@@ -492,20 +504,22 @@ namespace Davion.FrontEnd
         /*
              factor  =  designator |  number  |  “(“ expression “)”  | funcCall
         */
-        public bool Factor()
+        public bool Factor(out IOperand fac_result)
         {
+            // IOperand fac;
             if(PreFetchSym() == Tokens.kIdent){
-                if(Designator() == false){
+                if(Designator(fac_result) == false){
                     Error("Expected Designator");
                     return false;
                 }
             }
             else if(PreFetchSym() == Tokens.kNumber){
+                fac_result = new Immdiate(scanner_.val);
                 Next(); // eat number
             }
             else if(PreFetchSym() == Tokens.kOpenparenToken){
                 Next();
-                if(Expression() == false){
+                if(Expression(fac_result) == false){
                     Error("Expected Expression");
                     return false;
                 }
@@ -514,7 +528,7 @@ namespace Davion.FrontEnd
                 }
             }
             else if(PreFetchSym() = Tokens.kCallToken){
-                if(FuncCall() == false){
+                if(FuncCall(fac_result) == false){
                     Error("Expected FuncCall");
                     return false;
                 }
@@ -529,21 +543,36 @@ namespace Davion.FrontEnd
         /*
              term =  factor { (“*” | “/”) factor}.
         */
-        public bool Term()
+        public bool Term(out IOperand term_result)
         {
-            if(Factor() == false){
+            IOperand fac_0;
+            if(Factor(fac_0) == false){
                 Error("Expected Factor");
                 return false;
             }
+            term_result = fac_0;
 
             while(PreFetchSym() == Tokens.kTimesTocken || 
                 PreFetchSym() == Tokens.kDivToken){
+                int op;
+                if(PreFetchSym() == Tokens.kTimesTocken){
+                    op = Opcode.Mul;
+                }
+                else{
+                    op = Opcode.Div;
+                }
+
                 Next();
 
-                if(Factor() == false){
+                IOperand temp_fac;
+                if(Factor(temp_fac) == false){
                     Error("Expected Factor");
                     return false;
                 }
+
+                GenerateIR(function, block_id, op, 
+                            new IOperand[2]{term_result, temp_fac},
+                            term_result); // for some BasicBlock : exp_result = exp_result op temp_term
             }
 
             return true;
@@ -551,24 +580,43 @@ namespace Davion.FrontEnd
         /*
              expression  =  term {(“+” | “-”) term}
         */
-        public bool Expression()
+        public bool Expression(out IOperand exp_result)
         {
-            if(Term() == false){
+            // exp_result = Variable.GetTemporary();
+
+            IOperand term_0;
+            if(Term(term_0) == false){
                 Error("Expected Term");
                 return false;
             }
 
+            exp_result = term_0;
+
             while(PreFetchSym() == Tokens.kPlusToken ||
                 PreFetchSym() == Tokens.kMinusToken){
+
+                int op;
+                if(PreFetchSym() == Tokens.kPlusToken){
+                    op = Opcode.Add;
+                }
+                else{
+                    op = Opcode.Sub
+                }
+
                 Next();
 
-                if(Term() == false){
+                IOperand temp_term;
+                if(Term(temp_term) == false){
                     Error("Expected Term");
                     return false;
                 }
+
+                GenerateIR(function, block_id, op, 
+                        new IOperand[2]{exp_result, temp_term},
+                        exp_result); // for some BasicBlock : exp_result = exp_result op temp_term
             }
             return true;
-        } 
+        }
         /*
              relation = expression relOp expression
         */
