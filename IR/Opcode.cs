@@ -23,6 +23,7 @@
         Bgt,
         Read,
         Write,
-        WriteNL
+        WriteNL,
+        Nop
     }
 }
