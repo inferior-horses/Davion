@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
 
 namespace IR
 {
@@ -20,29 +19,57 @@ namespace IR
         {
             return Value.ToString();
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Immdiate rhs)
+            {
+                return rhs.Value == Value;
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return Value.GetHashCode();
+        }
     }
 
     public class Variable : IOperand
     {
         public readonly string Name;
-        private static int _number = 0;
-
-        public static Variable GetTemporary()
-        {
-            var sb = new StringBuilder();
-            sb.Append('t').Append(_number);
-            _number += 1;
-            return new Variable(sb.ToString());
-        }
 
         public Variable(string name)
         {
             Name = name;
         }
 
+        public Variable(int number)
+        {
+            var sb = new StringBuilder();
+            sb.Append('t').Append(number);
+            Name = sb.ToString();
+        }
+
         public override string ToString()
         {
             return Name;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Variable rhs)
+            {
+                return rhs.Name.Equals(Name);
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode();
         }
     }
 }
