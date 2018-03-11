@@ -1,10 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Davion", "Davion\Davion.csproj", "{4819FAA6-06AB-4EB9-8AB8-3C8E7F195D97}"
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2027
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Davion", "Davion\Davion.csproj", "{4819FAA6-06AB-4EB9-8AB8-3C8E7F195D97}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IR", "IR\IR.csproj", "{91996446-E614-4483-86E5-C5E382347B95}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IR", "IR\IR.csproj", "{91996446-E614-4483-86E5-C5E382347B95}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optimization", "Optimization\Optimization.csproj", "{53D823E9-4F32-4A6C-9F8E-65721DC75162}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrontEnd", "FrontEnd\FrontEnd.csproj", "{AB3F8A29-26DE-4F6C-BE3D-9730985E0A4A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,5 +29,15 @@ Global
 		{53D823E9-4F32-4A6C-9F8E-65721DC75162}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53D823E9-4F32-4A6C-9F8E-65721DC75162}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53D823E9-4F32-4A6C-9F8E-65721DC75162}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB3F8A29-26DE-4F6C-BE3D-9730985E0A4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB3F8A29-26DE-4F6C-BE3D-9730985E0A4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB3F8A29-26DE-4F6C-BE3D-9730985E0A4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB3F8A29-26DE-4F6C-BE3D-9730985E0A4A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C6A5B2E1-69B5-44ED-A1B6-83EB216FB314}
 	EndGlobalSection
 EndGlobal
