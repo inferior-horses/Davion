@@ -1,10 +1,16 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\FrontEnd\FrontEnd.csproj" />
+    <Compile Remove="FrontEnd.cs" />
+    <Compile Remove="Parser.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\IR\IR.csproj" />
   </ItemGroup>
+
 </Project>
