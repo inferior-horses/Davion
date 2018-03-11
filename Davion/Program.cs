@@ -1,12 +1,18 @@
 ﻿using System;
+using System.IO;
 
 namespace Davion
 {
-    class Program
+    public class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            string dirpath = Directory.GetCurrentDirectory();
+            Console.WriteLine("Hello World!" + dirpath);
+            ScannerTest test_scanner = new ScannerTest(@"..\..\CodeSample\test002.txt");
+
+            test_scanner.PrintToken();
+            Console.ReadKey();
         }
     }
 }

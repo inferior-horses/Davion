@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using IR.Block
-using IR.Operand
-using IR.Instructions
-using FrontEnd.GenerateIR
+using IR;
+using FrontEnd;
 
-namespace Davion.FrontEnd
+namespace FrontEnd
 {
     public class Parser
     {
@@ -15,28 +13,28 @@ namespace Davion.FrontEnd
             this.scanner_ = new Scanner(file_name);
         }
         private Scanner scanner_;
-        private int scanner_sym_;
+        private TokenHelper.Tokens scanner_sym_;
 
         private void Next()
         {
             scanner_sym_ = scanner_.GetSym(); // advance to the next token
         }
-        private int PreFetchSym()
+        private TokenHelper.Tokens PreFetchSym()
         {
             return scanner_.PreFetchSym();
         }
 
         public void Error(string error_msg)
         {
-            Console.WriteLine("-- ERROR: {0} -- ", 
+            Console.Error.WriteLine("-- Parser ERROR: {0} -- ", 
                 error_msg);
         }
 
-        public bool EatToken(uint token_enum)
+        public bool EatToken(TokenHelper.Tokens token_enum)
         {
             Next();
             if(scanner_sym_ != token_enum){
-                Error("Expected " + Enum.GetName(typeof(Tokens), token_enum));
+                Error("Expected " + Enum.GetName(typeof(TokenHelper.Tokens), token_enum));
                 return false;
             }
             return true;
@@ -44,15 +42,15 @@ namespace Davion.FrontEnd
 
 
         /*
-            -------------------------------------------             
+            -------------------------------------------
         */
         public bool MainComputation()
         {
-            if(!EatToken(Tokens.kMainToken)){
+            if(!EatToken(TokenHelper.Tokens.kMainToken)){
                 return false;
             }
 
-            // Next(); // look forward into VarDecl 
+            // Next(); // look forward into VarDecl
             while(VarDecl() != false)
             {
             }
@@ -60,7 +58,7 @@ namespace Davion.FrontEnd
             {
             }
 
-            if(!EatToken(Tokens.kBeginToken)){
+            if(!EatToken(TokenHelper.Tokens.kBeginToken)){
                 return false;
             }
 
@@ -69,11 +67,11 @@ namespace Davion.FrontEnd
                 return false;
             }
 
-            if(!EatToken(Tokens.kEndToken)){
+            if(!EatToken(TokenHelper.Tokens.kEndToken)){
                 return false;
             }
 
-            if(!EatToken(Tokens.kPeriodToken)){
+            if(!EatToken(TokenHelper.Tokens.kPeriodToken)){
                 return false;
             }
 
@@ -86,7 +84,7 @@ namespace Davion.FrontEnd
 
 
         /*
-            -------------------------------------------             
+            -------------------------------------------
         */
         /*
             varDecl  =  typeDecl ident { “,” ident } “;” 
@@ -97,19 +95,19 @@ namespace Davion.FrontEnd
                 Error("Expected TypeDecl");
                 return false;
             }
-            if(!EatToken(Tokens.kIdent)){
+            if(!EatToken(TokenHelper.Tokens.kIdent)){
                 return false;
             }
 
-            while(PreFetchSym() == Tokens.kCommaToken){
+            while(PreFetchSym() == TokenHelper.Tokens.kCommaToken){
                 Next(); // eat
 
-                if(!EatToken(Tokens.kIdent)){
+                if(!EatToken(TokenHelper.Tokens.kIdent)){
                     return false;
                 }
             }
 
-            if(!EatToken(Tokens.kSemiToken)){
+            if(!EatToken(TokenHelper.Tokens.kSemiToken)){
                 return false;
             }
             return true;
@@ -120,24 +118,24 @@ namespace Davion.FrontEnd
         */
         public bool FuncDecl()
         {
-            if(PreFetchSym() != Tokens.kFuncToken && PreFetchSym() != Tokens.kProcToken){
+            if(PreFetchSym() != TokenHelper.Tokens.kFuncToken && PreFetchSym() != TokenHelper.Tokens.kProcToken){
                 Error("Expected FuncToken or ProcToken");
                 return false;
             }
             Next();
 
-            if(!EatToken(Tokens.kIdent)){
+            if(!EatToken(TokenHelper.Tokens.kIdent)){
                 return false;
             }
 
-            if(PreFetchSym() != Tokens.kSemiToken){
+            if(PreFetchSym() != TokenHelper.Tokens.kSemiToken){
                 if(FormalParam() == false){
                     Error("Expected FormalParam");
                     return false;
                 }
             }
 
-            if(!EatToken(Tokens.kSemiToken)){
+            if(!EatToken(TokenHelper.Tokens.kSemiToken)){
                 return false;
             }
 
@@ -146,7 +144,7 @@ namespace Davion.FrontEnd
                 return false;
             }
 
-            if(!EatToken(Tokens.kSemiToken)){
+            if(!EatToken(TokenHelper.Tokens.kSemiToken)){
                 return false;
             }
 
@@ -160,34 +158,34 @@ namespace Davion.FrontEnd
         public bool TypeDecl()
         {
             // Next();
-            if(PreFetchSym() == Tokens.kArrayToken)
+            if(PreFetchSym() == TokenHelper.Tokens.kArrayToken)
             {
                 Next();
 
-                if(!EatToken(Tokens.kOpenbracketToken)){
+                if(!EatToken(TokenHelper.Tokens.kOpenbracketToken)){
                     return false;
                 }
-                if(!EatToken(Tokens.kNumber)){
+                if(!EatToken(TokenHelper.Tokens.kNumber)){
                     return false;
                 }
-                if(!EatToken(Tokens.kClosebracketToken)){
+                if(!EatToken(TokenHelper.Tokens.kClosebracketToken)){
                     return false;
                 }
 
                 // higher dimension
-                while(PreFetchSym() == Tokens.kOpenbracketToken)
+                while(PreFetchSym() == TokenHelper.Tokens.kOpenbracketToken)
                 {
                     Next();
-                    if(!EatToken(Tokens.kNumber)){
+                    if(!EatToken(TokenHelper.Tokens.kNumber)){
                         return false;
                     }
 
-                    if(!EatToken(Tokens.kClosebracketToken)){
+                    if(!EatToken(TokenHelper.Tokens.kClosebracketToken)){
                         return false;
                     }
                 }
             }
-            else if(PreFetchSym() == Tokens.kVarToken){
+            else if(PreFetchSym() == TokenHelper.Tokens.kVarToken){
                 Next();
                 // do sth.
             }
@@ -203,23 +201,23 @@ namespace Davion.FrontEnd
         */
         public bool FormalParam()
         {
-            if(!EatToken(Tokens.kOpenparenToken)){
+            if(!EatToken(TokenHelper.Tokens.kOpenparenToken)){
                 return false;
             }
 
-            if(PreFetchSym() == Tokens.kIdent){
+            if(PreFetchSym() == TokenHelper.Tokens.kIdent){
                 Next();
 
-                while(PreFetchSym() == Tokens.kCommaToken){
+                while(PreFetchSym() == TokenHelper.Tokens.kCommaToken){
                     Next();// Eat Comma
 
-                    if(!EatToken(Tokens.kIdent)){
+                    if(!EatToken(TokenHelper.Tokens.kIdent)){
                         return false;
                     }
                 }
             }
 
-            if(!EatToken(Tokens.kCloseparenToken)){
+            if(!EatToken(TokenHelper.Tokens.kCloseparenToken)){
                 return false;
             }
 
@@ -236,16 +234,16 @@ namespace Davion.FrontEnd
                 // eat {varDecl}, do sth.
             }
 
-            if(!EatToken(Tokens.kBeginToken)){
+            if(!EatToken(TokenHelper.Tokens.kBeginToken)){
                 return false;
             }
-            if(PreFetchSym() != Tokens.kEndToken){
+            if(PreFetchSym() != TokenHelper.Tokens.kEndToken){
                 while(StatSequence() != false){
                     // eat{statSequence}
                 }
             }
 
-            if(!EatToken(Tokens.kEndToken)){
+            if(!EatToken(TokenHelper.Tokens.kEndToken)){
                 return false;
             }
 
@@ -266,7 +264,7 @@ namespace Davion.FrontEnd
                 return false;
             }
 
-            while(PreFetchSym() == Tokens.kSemiToken){
+            while(PreFetchSym() == TokenHelper.Tokens.kSemiToken){
                 // eat
                 Next();
 
@@ -319,16 +317,16 @@ namespace Davion.FrontEnd
         {
             Variable dest;
             IOperand source;
-            if(!EatToken(Tokens.kLetToken)){
+            if(!EatToken(TokenHelper.Tokens.kLetToken)){
                 return false;
             }
 
-            if(Designator(dest) == false){
+            if(Designator(out dest) == false){
                 Error("Expected Designator");
                 return false;
             }
 
-            if(Expression(source) == false){
+            if(Expression(out source) == false){
                 Error("Expected Expression");
                 return false;
             }
@@ -341,24 +339,24 @@ namespace Davion.FrontEnd
         */
         public bool FuncCall(out IOperand func_result)
         {
-            if(!EatToken(Tokens.kCallToken)){
+            if(!EatToken(TokenHelper.Tokens.kCallToken)){
                 return false;
             }
 
-            if(!EatToken(Tokens.kIdent)){
+            if(!EatToken(TokenHelper.Tokens.kIdent)){
                 return false;
             }
 
-            if(PreFetchSym() == Tokens.kOpenparenToken){
+            if(PreFetchSym() == TokenHelper.Tokens.kOpenparenToken){
                 Next(); // eat "("
 
-                if(PreFetchSym() != Tokens.kCloseparenToken){ // assume expression won't begin with "")", due to EBNF
+                if(PreFetchSym() != TokenHelper.Tokens.kCloseparenToken){ // assume expression won't begin with "")", due to EBNF
                     if(Expression() == false){
                         Error("Expected Expression");
                         return false;
                     }
 
-                    while(PreFetchSym() == Tokens.kCommaToken){
+                    while(PreFetchSym() == TokenHelper.Tokens.kCommaToken){
                         Next(); // eat
 
                         if(Expression() == false){
@@ -368,7 +366,7 @@ namespace Davion.FrontEnd
                     }
                 }
 
-                if(!EatToken(Tokens.kCloseparenToken)){
+                if(!EatToken(TokenHelper.Tokens.kCloseparenToken)){
                     return false;
                 }
                 
@@ -381,7 +379,7 @@ namespace Davion.FrontEnd
         */
         public bool IfStatement()
         {
-            if(!EatToken(Tokens.kIfToken)){
+            if(!EatToken(TokenHelper.Tokens.kIfToken)){
                 return false;
             }
 
@@ -390,7 +388,7 @@ namespace Davion.FrontEnd
                 return false;
             }
 
-            if(!EatToken(Tokens.kThenToken)){
+            if(!EatToken(TokenHelper.Tokens.kThenToken)){
                 return false;
             }
 
@@ -399,7 +397,7 @@ namespace Davion.FrontEnd
                 return false;
             }
 
-            if(PreFetchSym() == Tokens.kElseToken){
+            if(PreFetchSym() == TokenHelper.Tokens.kElseToken){
                 Next(); // eat else
 
                 if(StatSequence() == false){
@@ -408,7 +406,7 @@ namespace Davion.FrontEnd
                 }
             }
 
-            if(!EatToken(Tokens.kFiToken)){
+            if(!EatToken(TokenHelper.Tokens.kFiToken)){
                 return false;
             }
 
@@ -419,7 +417,7 @@ namespace Davion.FrontEnd
         */
         public bool WhileStatement()
         {
-            if(!EatToken(Tokens.kWhileToken)){
+            if(!EatToken(TokenHelper.Tokens.kWhileToken)){
                 return false;
             }
 
@@ -428,7 +426,7 @@ namespace Davion.FrontEnd
                 return false;
             }
 
-            if(!EatToken(Tokens.kDoToken)){
+            if(!EatToken(TokenHelper.Tokens.kDoToken)){
                 return false;
             }
 
@@ -437,7 +435,7 @@ namespace Davion.FrontEnd
                 return false;
             }
 
-            if(!EatToken(Tokens.kOdToken)){
+            if(!EatToken(TokenHelper.Tokens.kOdToken)){
                 return false;
             }
 
@@ -448,14 +446,14 @@ namespace Davion.FrontEnd
         */
         public bool ReturnStatement()
         {
-            if(!EatToken(Tokens.kReturnToken)){
+            if(!EatToken(TokenHelper.Tokens.kReturnToken)){
                 return false;
             }
 
-            if(PreFetchSym() == Tokens.kCallToken || 
-                PreFetchSym() == Tokens.kOpenparenToken || 
-                PreFetchSym() == Tokens.kIdent || 
-                PreFetchSym() == Tokens.kNumber)
+            if(PreFetchSym() == TokenHelper.Tokens.kCallToken || 
+                PreFetchSym() == TokenHelper.Tokens.kOpenparenToken || 
+                PreFetchSym() == TokenHelper.Tokens.kIdent || 
+                PreFetchSym() == TokenHelper.Tokens.kNumber)
             {
                 if(Expression() == false){
                     Error("Expected Expression");
@@ -475,18 +473,18 @@ namespace Davion.FrontEnd
         */
         public bool Designator(out IOperand variable)
         {
-            if(!EatToken(Tokens.kIdent)){
+            if(!EatToken(TokenHelper.Tokens.kIdent)){
                 return false;
             }
             
             // is not array
             // necessary to devide into two situation?
-            if(PreFetchSym() != Tokens.kOpenbracketToken){
+            if(PreFetchSym() != TokenHelper.Tokens.kOpenbracketToken){
                 // current variable name is scanner_.id
-                variable = New Variable(scanner_.id);
+                variable = new Variable(scanner_.identifier_table[scanner_.id]);
             }
 
-            while(PreFetchSym() == Tokens.kOpenbracketToken){
+            while(PreFetchSym() == TokenHelper.Tokens.kOpenbracketToken){
                 Next();
 
                 if(Expression() == false){
@@ -494,7 +492,7 @@ namespace Davion.FrontEnd
                     return false;
                 }
 
-                if(!EatToken(Tokens.kClosebracketToken)){
+                if(!EatToken(TokenHelper.Tokens.kClosebracketToken)){
                     return false;
                 }
             }
@@ -507,28 +505,28 @@ namespace Davion.FrontEnd
         public bool Factor(out IOperand fac_result)
         {
             // IOperand fac;
-            if(PreFetchSym() == Tokens.kIdent){
-                if(Designator(fac_result) == false){
+            if(PreFetchSym() == TokenHelper.Tokens.kIdent){
+                if(Designator(out fac_result) == false){
                     Error("Expected Designator");
                     return false;
                 }
             }
-            else if(PreFetchSym() == Tokens.kNumber){
+            else if(PreFetchSym() == TokenHelper.Tokens.kNumber){
                 fac_result = new Immdiate(scanner_.val);
                 Next(); // eat number
             }
-            else if(PreFetchSym() == Tokens.kOpenparenToken){
+            else if(PreFetchSym() == TokenHelper.Tokens.kOpenparenToken){
                 Next();
-                if(Expression(fac_result) == false){
+                if(Expression(out fac_result) == false){
                     Error("Expected Expression");
                     return false;
                 }
-                if(!EatToken(Tokens.kCloseparenToken)){
+                if(!EatToken(TokenHelper.Tokens.kCloseparenToken)){
                     return false;
                 }
             }
-            else if(PreFetchSym() = Tokens.kCallToken){
-                if(FuncCall(fac_result) == false){
+            else if(PreFetchSym() = TokenHelper.Tokens.kCallToken){
+                if(FuncCall(out fac_result) == false){
                     Error("Expected FuncCall");
                     return false;
                 }
@@ -546,16 +544,16 @@ namespace Davion.FrontEnd
         public bool Term(out IOperand term_result)
         {
             IOperand fac_0;
-            if(Factor(fac_0) == false){
+            if(Factor(out fac_0) == false){
                 Error("Expected Factor");
                 return false;
             }
             term_result = fac_0;
 
-            while(PreFetchSym() == Tokens.kTimesTocken || 
-                PreFetchSym() == Tokens.kDivToken){
-                int op;
-                if(PreFetchSym() == Tokens.kTimesTocken){
+            while(PreFetchSym() == TokenHelper.Tokens.kTimesTocken || 
+                PreFetchSym() == TokenHelper.Tokens.kDivToken){
+                Opcode op;
+                if(PreFetchSym() == TokenHelper.Tokens.kTimesTocken){
                     op = Opcode.Mul;
                 }
                 else{
@@ -565,7 +563,7 @@ namespace Davion.FrontEnd
                 Next();
 
                 IOperand temp_fac;
-                if(Factor(temp_fac) == false){
+                if(Factor(out temp_fac) == false){
                     Error("Expected Factor");
                     return false;
                 }
@@ -585,28 +583,28 @@ namespace Davion.FrontEnd
             // exp_result = Variable.GetTemporary();
 
             IOperand term_0;
-            if(Term(term_0) == false){
+            if(Term(out term_0) == false){
                 Error("Expected Term");
                 return false;
             }
 
             exp_result = term_0;
 
-            while(PreFetchSym() == Tokens.kPlusToken ||
-                PreFetchSym() == Tokens.kMinusToken){
+            while(PreFetchSym() == TokenHelper.Tokens.kPlusToken ||
+                PreFetchSym() == TokenHelper.Tokens.kMinusToken){
 
-                int op;
-                if(PreFetchSym() == Tokens.kPlusToken){
+                Opcode op;
+                if(PreFetchSym() == TokenHelper.Tokens.kPlusToken){
                     op = Opcode.Add;
                 }
                 else{
-                    op = Opcode.Sub
+                    op = Opcode.Sub;
                 }
 
                 Next();
 
                 IOperand temp_term;
-                if(Term(temp_term) == false){
+                if(Term(out temp_term) == false){
                     Error("Expected Term");
                     return false;
                 }
@@ -639,12 +637,12 @@ namespace Davion.FrontEnd
         {
             Next();
 
-            if(scanner_sym_ == Tokens.kEqlToken ||
-                scanner_sym_ == Tokens.kNeqToken ||
-                scanner_sym_ == Tokens.kIssToken ||
-                scanner_sym_ == Tokens.kGeqToken ||
-                scanner_sym_ == Tokens.kLeqToken ||
-                scanner_sym_ == Tokens.kGtrToken ||)
+            if(scanner_sym_ == TokenHelper.Tokens.kEqlToken ||
+                scanner_sym_ == TokenHelper.Tokens.kNeqToken ||
+                scanner_sym_ == TokenHelper.Tokens.kIssToken ||
+                scanner_sym_ == TokenHelper.Tokens.kGeqToken ||
+                scanner_sym_ == TokenHelper.Tokens.kLeqToken ||
+                scanner_sym_ == TokenHelper.Tokens.kGtrToken )
             {
                 return true;
             }
