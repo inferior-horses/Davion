@@ -14,22 +14,22 @@ namespace Davion
     	}
 
     	public void PrintToken(){
-    		TokenHelper.Tokens cur_sym;
+    		Tokens cur_sym;
             uint counter = 0;
-    		while((cur_sym = scanner_.GetSym()) != TokenHelper.Tokens.kEndofToken){
+    		while((cur_sym = scanner_.GetSym()) != Tokens.kEndofToken){
                 uint line = scanner_.GetFileLine();
-                if (cur_sym == TokenHelper.Tokens.kErrorToken){
+                if (cur_sym == Tokens.kErrorToken){
     				char cur_char = scanner_.DebugCurChar();
 		    		Console.WriteLine("detected error in line {0} at char '{1}' ",
 		    			line, cur_char);
     			}
 
                 string cur_sym_str = "";
-                if (cur_sym == TokenHelper.Tokens.kNumber)
+                if (cur_sym == Tokens.kNumber)
                 {
                     cur_sym_str = "NUMBER : " + scanner_.Val;
                 }
-                else if (cur_sym == TokenHelper.Tokens.kIdent) {
+                else if (cur_sym == Tokens.kIdent) {
                     cur_sym_str = "IDENTIFIER : " + Scanner.identifier_table[scanner_.Id];
                 }
                 else { 

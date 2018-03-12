@@ -4,65 +4,65 @@ using System.Text;
 
 namespace FrontEnd
 {
+    public enum Tokens:uint
+    {
+        kErrorToken = 0,
+
+        kTimesTocken = 1,
+        kDivToken = 2,
+
+        kPlusToken = 11,
+        kMinusToken = 12,
+
+        kEqlToken = 20,
+        kNeqToken = 21,
+        kIssToken = 22,
+        kGeqToken = 23,
+        kLeqToken = 24,
+        kGtrToken = 25,
+
+        kPeriodToken = 30,
+        kCommaToken = 31,
+        kOpenbracketToken = 32,
+        kClosebracketToken = 34,
+        kCloseparenToken = 35,
+
+        kBecomesToken = 40,
+        kThenToken = 41,
+        kDoToken = 42,
+
+        kOpenparenToken = 50,
+
+        kNumber = 60,
+        kIdent = 61,
+
+        kSemiToken = 70,
+        kEndToken = 80,
+        kOdToken = 81,
+        kFiToken = 82,
+
+        kElseToken = 90,
+
+        kLetToken = 100,
+        kCallToken = 101,
+        kIfToken = 102,
+        kWhileToken = 103,
+        kReturnToken = 104,
+
+        kVarToken = 110,
+        kArrayToken = 111,
+        kFuncToken = 112,
+        kProcToken = 113,
+
+        kBeginToken = 150,
+
+        kMainToken = 200,
+
+        kNullToken = 254,
+        kEndofToken = 255
+    };
+
     public class TokenHelper { 
-        public enum Tokens:uint
-        {
-            kErrorToken = 0,
-
-            kTimesTocken = 1,
-            kDivToken = 2,
-
-            kPlusToken = 11,
-            kMinusToken = 12,
-
-            kEqlToken = 20,
-            kNeqToken = 21,
-            kIssToken = 22,
-            kGeqToken = 23,
-            kLeqToken = 24,
-            kGtrToken = 25,
-
-            kPeriodToken = 30,
-            kCommaToken = 31,
-            kOpenbracketToken = 32,
-            kClosebracketToken = 34,
-            kCloseparenToken = 35,
-
-            kBecomesToken = 40,
-            kThenToken = 41,
-            kDoToken = 42,
-
-            kOpenparenToken = 50,
-
-            kNumber = 60,
-            kIdent = 61,
-
-            kSemiToken = 70,
-            kEndToken = 80,
-            kOdToken = 81,
-            kFiToken = 82,
-
-            kElseToken = 90,
-
-            kLetToken = 100,
-            kCallToken = 101,
-            kIfToken = 102,
-            kWhileToken = 103,
-            kReturnToken = 104,
-
-            kVarToken = 110,
-            kArrayToken = 111,
-            kFuncToken = 112,
-            kProcToken = 113,
-
-            kBeginToken = 150,
-
-            kMainToken = 200,
-
-            kNullToken = 254,
-            kEndofToken = 255
-        };
-
         public static Dictionary<string, Tokens> TOKENSET = new Dictionary<string, Tokens>()
         {
             {new string((char)0x00, 1), Tokens.kErrorToken},

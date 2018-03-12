@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <Compile Remove="FrontEnd.cs" />
-    <Compile Remove="Parser.cs" />
+    <Compile Remove="GenerateIR.cs" />
   </ItemGroup>
 
   <ItemGroup>

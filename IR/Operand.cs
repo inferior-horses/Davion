@@ -40,6 +40,7 @@ namespace IR
     {
         public readonly string Name;
 
+        // actaully have id2name mapping in scanner
         public Variable(string name)
         {
             Name = name;

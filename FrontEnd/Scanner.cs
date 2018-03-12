@@ -11,7 +11,7 @@ namespace FrontEnd
     {
         private char input_sym_; // current character on the input, 0x00=error, 0xff=EOF
         private FileReader file_reader_;
-        private TokenHelper.Tokens current_token_;
+        private Tokens current_token_;
 
         public int Val { get; private set; } // public int number; // value of the last number encountered
         // private int next_val_;
@@ -26,7 +26,7 @@ namespace FrontEnd
             identifier_table = new List<string>();
             this.file_reader_ = new FileReader(file_name);
 
-            this.current_token_ = TokenHelper.Tokens.kNullToken;
+            this.current_token_ = Tokens.kNullToken;
             Next();
             GetSym();
         }
@@ -46,7 +46,7 @@ namespace FrontEnd
             }
 
             if(is_number){
-                current_token_ = TokenHelper.Tokens.kNumber;
+                current_token_ = Tokens.kNumber;
             }
 
             return is_number;
@@ -82,7 +82,7 @@ namespace FrontEnd
 
             // Id = next_id_;
             Id = pos;
-            current_token_ = TokenHelper.Tokens.kIdent;
+            current_token_ = Tokens.kIdent;
             return true;
         }
 
@@ -110,21 +110,21 @@ namespace FrontEnd
                 return true;
             }
         }
-		public TokenHelper.Tokens GetSym() // public int sym; // the current token on the input, 0 = error token, 255 = end-of-file token
+		public Tokens GetSym() // public int sym; // the current token on the input, 0 = error token, 255 = end-of-file token
 		{
-            TokenHelper.Tokens r = current_token_;
-            if(r == TokenHelper.Tokens.kEndofToken){
+            Tokens r = current_token_;
+            if(r == Tokens.kEndofToken){
                 Next();
                 return r;
             }
 
             if (!SkipSpace()){
-                current_token_ = TokenHelper.Tokens.kEndofToken;
+                current_token_ = Tokens.kEndofToken;
                 return r;
             }
 
             if(input_sym_ == FileReader.kEndSymbol){
-                current_token_ = TokenHelper.Tokens.kEndofToken;
+                current_token_ = Tokens.kEndofToken;
                 return r;
             }
 
@@ -147,7 +147,7 @@ namespace FrontEnd
                         return r;
                     }
                     else{
-                        current_token_ = TokenHelper.Tokens.kDivToken;
+                        current_token_ = Tokens.kDivToken;
                         return r;
                     }
                     break;
@@ -156,12 +156,12 @@ namespace FrontEnd
                     Next();
                     if(input_sym_ == '='){
                         Next();
-                        current_token_ = TokenHelper.Tokens.kEqlToken;
+                        current_token_ = Tokens.kEqlToken;
                         return r;
                     }
                     else{
                         Error(@"'=' should be followed by '='");
-                        current_token_ = TokenHelper.Tokens.kErrorToken;
+                        current_token_ = Tokens.kErrorToken;
                         return r;
                     }
                     break;
@@ -170,12 +170,12 @@ namespace FrontEnd
                     Next();
                     if(input_sym_ == '='){
                         Next();
-                        current_token_ = TokenHelper.Tokens.kNeqToken;
+                        current_token_ = Tokens.kNeqToken;
                         return r;
                     }
                     else{
                         Error(@"'!' should be followed by '='");
-                        current_token_ = TokenHelper.Tokens.kErrorToken;
+                        current_token_ = Tokens.kErrorToken;
                         return r;
                     }
                     break;
@@ -184,11 +184,11 @@ namespace FrontEnd
                     Next();
                     if(input_sym_ == '='){
                         Next();
-                        current_token_ = TokenHelper.Tokens.kGeqToken;
+                        current_token_ = Tokens.kGeqToken;
                         return r;
                     }
                     else{
-                        current_token_ = TokenHelper.Tokens.kGtrToken;
+                        current_token_ = Tokens.kGtrToken;
                         return r;
                     }
                     break;
@@ -197,83 +197,83 @@ namespace FrontEnd
                     Next();
                     if(input_sym_ == '='){
                         Next();
-                        current_token_ = TokenHelper.Tokens.kLeqToken;
+                        current_token_ = Tokens.kLeqToken;
                         return r;
                     }
                     else if(input_sym_ == '-'){
                         Next();
-                        current_token_ = TokenHelper.Tokens.kBecomesToken;
+                        current_token_ = Tokens.kBecomesToken;
                         return r;
                     }
                     else{
-                        current_token_ = TokenHelper.Tokens.kIssToken;
+                        current_token_ = Tokens.kIssToken;
                         return r;
                     }
                     break;
                 }
                 case '+':{
                     Next();
-                    current_token_ = TokenHelper.Tokens.kPlusToken;
+                    current_token_ = Tokens.kPlusToken;
                     return r;
                 }
                 case '-':{
                     Next();
-                    current_token_ = TokenHelper.Tokens.kMinusToken;
+                    current_token_ = Tokens.kMinusToken;
                     return r;
                 }
                 case '*':{
                     Next();
-                    current_token_ = TokenHelper.Tokens.kTimesTocken;
+                    current_token_ = Tokens.kTimesTocken;
                     return r;
                 }
                 case '.':{
                     Next();
-                    current_token_ = TokenHelper.Tokens.kPeriodToken;
+                    current_token_ = Tokens.kPeriodToken;
                     return r;
                 }
                 case ',':{
                     Next();
-                    current_token_ = TokenHelper.Tokens.kCommaToken;
+                    current_token_ = Tokens.kCommaToken;
                     return r;
                 }
                 case ';':{
                     Next();
-                    current_token_ = TokenHelper.Tokens.kSemiToken;
+                    current_token_ = Tokens.kSemiToken;
                     return r;
                 }
                 case '(':{
                     Next();
-                    current_token_ = TokenHelper.Tokens.kOpenparenToken;
+                    current_token_ = Tokens.kOpenparenToken;
                     return r;
                 }
                 case ')':{
                     Next();
-                    current_token_ = TokenHelper.Tokens.kCloseparenToken;
+                    current_token_ = Tokens.kCloseparenToken;
                     return r;
                 }
                 case '[':{
                     Next();
-                    current_token_ = TokenHelper.Tokens.kOpenbracketToken;
+                    current_token_ = Tokens.kOpenbracketToken;
                     return r;
                 }
                 case ']':{
                     Next();
-                    current_token_ = TokenHelper.Tokens.kClosebracketToken;
+                    current_token_ = Tokens.kClosebracketToken;
                     return r;
                 }
                 case '{':{
                     Next();
-                    current_token_ = TokenHelper.Tokens.kBeginToken;
+                    current_token_ = Tokens.kBeginToken;
                     return r;
                 }
                 case '}':{
                     Next();
-                    current_token_ = TokenHelper.Tokens.kEndToken;
+                    current_token_ = Tokens.kEndToken;
                     return r;
                 }
             }
             {
-                current_token_ = TokenHelper.Tokens.kErrorToken;
+                current_token_ = Tokens.kErrorToken;
             }
             return r;
         }
@@ -284,13 +284,13 @@ namespace FrontEnd
                 error_msg);
         }
 
-        public TokenHelper.Tokens PreFetchSym()
+        public Tokens PreFetchSym()
         {
             return current_token_;
         }
 
 
-        public string Token2String(TokenHelper.Tokens token){
+        public string Token2String(Tokens token){
             string key_str = TokenHelper.TOKENSET.FirstOrDefault(x => x.Value == token).Key;
             return key_str;
         }
